@@ -8,11 +8,21 @@ Ported to STM32F103 on 23 Aug 2015 by **Vassilis Serasidis**
 
 Library installation
 ----
-Just unzip the file **Ethernet_STM-master.zip** into your Arduino IDE directory
+### *Instal the library globally* ###
 
+
+* Unzip the file **Ethernet_STM-master.zip** into your Arduino IDE directory 
+> arduino\libraries
+
+and rename the folder **Ethernet_STM-master** to **Ethernet_STM**
+
+#### *Install the library for using it only with STM32F1 series* ###
+ 
+* Unzip the file **Ethernet_STM-master.zip** into your Arduino IDE directory 
 > ...arduino\hardware\Arduino_STM32\STM32F1\libraries
 
 and rename the folder **Ethernet_STM-master** to **Ethernet_STM**
+
 
 Selecting the Ethernet type controller (W5100, W5200 or W5500)
 ----
@@ -28,6 +38,16 @@ By default the **W5500** ethernet chip is selected.
 #define W5500_ETHERNET_SHIELD   // WIZ550io, ioShield series of WIZnet
 ```
 If you edit the **w5100.h** file, save it and re-compile your sketch. 
+
+Using the Ethernet_STM library
+----
+1. Choose the desired ethernet chip you want to use (W5100, W5200 or W5500) from the w5100.h file
+2. include in your sketch this library 
+
+`#include <Ethernet_STM.h>`
+
+The same functions / commands are the same as the stock Arduino Ethernet library. 
+
 
 PIN Connections
 ----
