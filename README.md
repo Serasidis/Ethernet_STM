@@ -12,13 +12,15 @@ Library installation
 
 
 * Unzip the file **Ethernet_STM-master.zip** into your Arduino IDE directory 
+
 > arduino\libraries
 
 and rename the folder **Ethernet_STM-master** to **Ethernet_STM**
 
 #### *Install the library for using it only with STM32F1 series* ###
  
-* Unzip the file **Ethernet_STM-master.zip** into your Arduino IDE directory 
+* Unzip the file **Ethernet_STM-master.zip** into your Arduino IDE directory
+
 > ...arduino\hardware\Arduino_STM32\STM32F1\libraries
 
 and rename the folder **Ethernet_STM-master** to **Ethernet_STM**
