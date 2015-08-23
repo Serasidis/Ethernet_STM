@@ -44,7 +44,7 @@ If you edit the **w5100.h** file, save it and re-compile your sketch.
 Using the Ethernet_STM library
 ----
 1. Choose the desired ethernet chip you want to use (W5100, W5200 or W5500) from the w5100.h file
-2. include in your sketch this library 
+2. include this library in your sketch  
 
 `#include <Ethernet_STM.h>`
 
