@@ -48,7 +48,7 @@ Using the Ethernet_STM library
 
 `#include <Ethernet_STM.h>`
 
-The same functions / commands are the same as the stock Arduino Ethernet library. 
+All functions / commands have the same syntax with the stock Arduino Ethernet library. 
 
 
 PIN Connections
