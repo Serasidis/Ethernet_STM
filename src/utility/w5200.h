@@ -7,33 +7,14 @@
  * published by the Free Software Foundation.
  */
 
-#ifndef	W5100_H_INCLUDED
-#define	W5100_H_INCLUDED
+#ifndef	W5200_H_INCLUDED
+#define	W5200_H_INCLUDED
 
-#include <SPI.h>
+//#include <avr/pgmspace.h>
+//#include <SPI.h>
 
-typedef uint8_t SOCKET;
-
-//#define W5100_ETHERNET_SHIELD // Arduino Ethenret Shield and Compatibles ...
-//#define W5200_ETHERNET_SHIELD // WIZ820io, W5200 Ethernet Shield 
-#define W5500_ETHERNET_SHIELD   // WIZ550io, ioShield series of WIZnet
-
-#if defined(W5500_ETHERNET_SHIELD)
-//#define WIZ550io_WITH_MACADDRESS // Use assigned MAC address of WIZ550io
-#include "utility/w5500.h"
-#endif
-
-#if defined(W5200_ETHERNET_SHIELD)
-#include "utility/w5200.h"
-#endif
-
-#if defined(W5100_ETHERNET_SHIELD)
-#define MAX_SOCK_NUM 4
-
-#define IDM_OR  0x8000
-#define IDM_AR0 0x8001
-#define IDM_AR1 0x8002
-#define IDM_DR  0x8003
+#define MAX_SOCK_NUM 8
+//typedef uint8_t SOCKET;
 /*
 class MR {
 public:
@@ -139,7 +120,7 @@ public:
   static const uint8_t RAW  = 255;
 };
 
-class W5100Class {
+class W5200Class {
 
 public:
   void init();
@@ -245,14 +226,10 @@ public:
   __GP_REGISTER8 (IR,     0x0015);    // Interrupt
   __GP_REGISTER8 (IMR,    0x0016);    // Interrupt Mask
   __GP_REGISTER16(RTR,    0x0017);    // Timeout address
-  __GP_REGISTER8 (RCR,    0x0019);    // Retry count
-  __GP_REGISTER8 (RMSR,   0x001A);    // Receive memory size
-  __GP_REGISTER8 (TMSR,   0x001B);    // Transmit memory size
+  __GP_REGISTER8 (RCR,    0x0019);    // Retry count  
   __GP_REGISTER8 (PATR,   0x001C);    // Authentication type address in PPPoE mode
   __GP_REGISTER8 (PTIMER, 0x0028);    // PPP LCP Request Timer
   __GP_REGISTER8 (PMAGIC, 0x0029);    // PPP LCP Magic Number
-  __GP_REGISTER_N(UIPR,   0x002A, 4); // Unreachable IP address in UDP mode
-  __GP_REGISTER16(UPORT,  0x002E);    // Unreachable Port address in UDP mode
   
 #undef __GP_REGISTER8
 #undef __GP_REGISTER16
@@ -266,7 +243,8 @@ private:
   static inline uint16_t readSn(SOCKET _s, uint16_t _addr, uint8_t *_buf, uint16_t len);
   static inline uint16_t writeSn(SOCKET _s, uint16_t _addr, uint8_t *_buf, uint16_t len);
 
-  static const uint16_t CH_BASE = 0x0400;
+
+  static const uint16_t CH_BASE = 0x4000;
   static const uint16_t CH_SIZE = 0x0100;
 
 #define __SOCKET_REGISTER8(name, address)                    \
@@ -324,8 +302,7 @@ public:
 
 private:
   static const uint8_t  RST = 7; // Reset BIT
-
-  static const int SOCKETS = 4;
+  static const int SOCKETS = 8;
   static const uint16_t SMASK = 0x07FF; // Tx buffer MASK
   static const uint16_t RMASK = 0x07FF; // Rx buffer MASK
 public:
@@ -337,7 +314,12 @@ private:
 
 private:
 #if defined(ARDUINO_ARCH_AVR)
-#if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__) || defined(__AVR_ATmega1284P__)
+#if defined(REL_GR_KURUMI) || defined(REL_GR_KURUMI_PROTOTYPE)
+  inline static void initSS()    { pinMode(SS, OUTPUT); \
+                                   digitalWrite(SS, HIGH); };
+  inline static void setSS()     { digitalWrite(SS, LOW); };
+  inline static void resetSS()   { digitalWrite(SS, HIGH); };
+#elif defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__) || defined(__AVR_ATmega1284P__)
   inline static void initSS()    { DDRB  |=  _BV(4); };
   inline static void setSS()     { PORTB &= ~_BV(4); };
   inline static void resetSS()   { PORTB |=  _BV(4); };
@@ -349,11 +331,6 @@ private:
   inline static void initSS()    { DDRB  |=  _BV(0); };
   inline static void setSS()     { PORTB &= ~_BV(0); };
   inline static void resetSS()   { PORTB |=  _BV(0); }; 
-#elif defined(REL_GR_KURUMI) || defined(REL_GR_KURUMI_PROTOTYPE)
-  inline static void initSS()    { pinMode(SS, OUTPUT); \
-                                   digitalWrite(SS, HIGH); };
-  inline static void setSS()     { digitalWrite(SS, LOW); };
-  inline static void resetSS()   { digitalWrite(SS, HIGH); };
 #else
   inline static void initSS()    { DDRB  |=  _BV(2); };
   inline static void setSS()     { PORTB &= ~_BV(2); };
@@ -362,63 +339,62 @@ private:
 #endif // ARDUINO_ARCH_AVR
 };
 
-extern W5100Class W5100;
+extern W5200Class W5100;
 
-uint8_t W5100Class::readSn(SOCKET _s, uint16_t _addr) {
+uint8_t W5200Class::readSn(SOCKET _s, uint16_t _addr) {
   return read(CH_BASE + _s * CH_SIZE + _addr);
 }
 
-uint8_t W5100Class::writeSn(SOCKET _s, uint16_t _addr, uint8_t _data) {
+uint8_t W5200Class::writeSn(SOCKET _s, uint16_t _addr, uint8_t _data) {
   return write(CH_BASE + _s * CH_SIZE + _addr, _data);
 }
 
-uint16_t W5100Class::readSn(SOCKET _s, uint16_t _addr, uint8_t *_buf, uint16_t _len) {
+uint16_t W5200Class::readSn(SOCKET _s, uint16_t _addr, uint8_t *_buf, uint16_t _len) {
   return read(CH_BASE + _s * CH_SIZE + _addr, _buf, _len);
 }
 
-uint16_t W5100Class::writeSn(SOCKET _s, uint16_t _addr, uint8_t *_buf, uint16_t _len) {
+uint16_t W5200Class::writeSn(SOCKET _s, uint16_t _addr, uint8_t *_buf, uint16_t _len) {
   return write(CH_BASE + _s * CH_SIZE + _addr, _buf, _len);
 }
 
-void W5100Class::getGatewayIp(uint8_t *_addr) {
+void W5200Class::getGatewayIp(uint8_t *_addr) {
   readGAR(_addr);
 }
 
-void W5100Class::setGatewayIp(uint8_t *_addr) {
+void W5200Class::setGatewayIp(uint8_t *_addr) {
   writeGAR(_addr);
 }
 
-void W5100Class::getSubnetMask(uint8_t *_addr) {
+void W5200Class::getSubnetMask(uint8_t *_addr) {
   readSUBR(_addr);
 }
 
-void W5100Class::setSubnetMask(uint8_t *_addr) {
+void W5200Class::setSubnetMask(uint8_t *_addr) {
   writeSUBR(_addr);
 }
 
-void W5100Class::getMACAddress(uint8_t *_addr) {
+void W5200Class::getMACAddress(uint8_t *_addr) {
   readSHAR(_addr);
 }
 
-void W5100Class::setMACAddress(uint8_t *_addr) {
+void W5200Class::setMACAddress(uint8_t *_addr) {
   writeSHAR(_addr);
 }
 
-void W5100Class::getIPAddress(uint8_t *_addr) {
+void W5200Class::getIPAddress(uint8_t *_addr) {
   readSIPR(_addr);
 }
 
-void W5100Class::setIPAddress(uint8_t *_addr) {
+void W5200Class::setIPAddress(uint8_t *_addr) {
   writeSIPR(_addr);
 }
 
-void W5100Class::setRetransmissionTime(uint16_t _timeout) {
+void W5200Class::setRetransmissionTime(uint16_t _timeout) {
   writeRTR(_timeout);
 }
 
-void W5100Class::setRetransmissionCount(uint8_t _retry) {
+void W5200Class::setRetransmissionCount(uint8_t _retry) {
   writeRCR(_retry);
 }
-#endif
 
 #endif
