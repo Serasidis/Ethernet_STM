@@ -8,7 +8,7 @@ Ported to STM32F103 on 23 Aug 2015 by **Vassilis Serasidis**
 
 Library installation
 ----
-### *Instal the library globally* ###
+### *Install the library globally* ###
 
 
 * Unzip the file **Ethernet_STM-master.zip** into your Arduino IDE directory 
