@@ -17,6 +17,8 @@ Library installation
 
 and rename the folder **Ethernet_STM-master** to **Ethernet_STM**
 
+In this case the library can be used from the 8-bit and 32-bit Arduino boards (UNO, Nano, DUE etc) and from STM32F1 microcontroller series (for example STM32F103).
+
 #### *Install the library for using it only with STM32F1 series* ###
  
 * Unzip the file **Ethernet_STM-master.zip** into your Arduino IDE directory
