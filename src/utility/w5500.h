@@ -10,7 +10,32 @@
 #ifndef	W5500_H_INCLUDED
 #define	W5500_H_INCLUDED
 
-#define MAX_SOCK_NUM 8
+/** Total RAM buffer is 16 kBytes for Transmitter and 16 kBytes for receiver for 1 Socket.
+ *  The Total W5500 RAM buffer is 32 kBytes (16 + 16).
+ *  If you use more Sockets then the RAM buffer must be split.
+ *  For example: if you use 2 Sockets then all socket must use upto 16 kBytes in total RAM.
+ *  So, we have: 
+ *
+ *  #define MAX_SOCK_NUM 2   // Select two Sockets.
+ *  #define RXBUF_SIZE   8   // The Receiver buffer size will be 8 kBytes
+ *  #define TXBUF_SIZE   8   // The Transmitter buffer size will be 8 kBytes
+ *
+ *  In total we use (2 Sockets)*(8 kBytes) for transmitter + (2 Sockets)*(8 kBytes) for receiver = 32 kBytes.
+ * 
+ *  I would prefer to use only 1 Socket with 16 kBytes RAM buffer for transmitter and 16 kByte for receiver buffer.
+ *
+ *  #define MAX_SOCK_NUM 1   // Select only one Socket
+ *  #define RXBUF_SIZE   16  // Select 16 kBytes Receiver RAM buffer
+ *  #define TXBUF_SIZE   16  // Select 16 kBytes Transmitter RAM buffer
+ * 
+ *  (c) 02 September 2015 By Vassilis Serasidis 
+ * 
+ */
+
+#define MAX_SOCK_NUM 8   // Select the number of Sockets (1-8)
+#define RXBUF_SIZE   2   // Select the Receiver buffer size (1 - 16 kBytes)
+#define TXBUF_SIZE   2   // Select the Transmitter buffer size (1 - 16 kBytes)
+
 /*
 class MR {
 public:
