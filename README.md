@@ -34,14 +34,52 @@ For selecting among those tree chips edit the file:
 `Ethernet_STM\src\utility\w5100.h`
 and comment-out only the line with the chip you want to use.
 
-By default the **W5500** ethernet chip is selected.
+
+
+By default the **W5500** ethernet controller is selected.
+
 
 ```
 //#define W5100_ETHERNET_SHIELD // Arduino Ethenret Shield and Compatibles ...
 //#define W5200_ETHERNET_SHIELD // WIZ820io, W5200 Ethernet Shield 
 #define W5500_ETHERNET_SHIELD   // WIZ550io, ioShield series of WIZnet
 ```
-If you edit the **w5100.h** file, save it and re-compile your sketch. 
+If you edit the **w5100.h** file, save it and re-compile your sketch.
+
+Selecting W5500 Sockets number and RAM buffer amount
+----
+For selecting the Sockets number (1-8) and the RAM buffer amount (1-16 kBytes) for each Socket, edit the file:
+`Ethernet_STM\src\utility\w5500.h`
+and change the values you want.
+
+```
+Total RAM buffer is 16 kBytes for Transmitter and 16 kBytes for receiver for 1 Socket.
+The Total W5500 RAM buffer is 32 kBytes (16 + 16).
+If you use more Sockets then the RAM buffer must be split.
+For example: if you use 2 Sockets then all socket must use upto 16 kBytes in total RAM.
+So, we have: 
+ 
+   #define MAX_SOCK_NUM 2   // Select two Sockets.
+   #define RXBUF_SIZE   8   // The Receiver buffer size will be 8 kBytes
+   #define TXBUF_SIZE   8   // The Transmitter buffer size will be 8 kBytes
+ 
+In total we use (2 Sockets)*(8 kBytes) for transmitter + (2 Sockets)*(8 kBytes) for receiver = 32 kBytes.
+  
+I would prefer to use only 1 Socket with 16 kBytes RAM buffer for transmitter and 16 kByte for receiver buffer.
+ 
+   #define MAX_SOCK_NUM 1   // Select only one Socket
+   #define RXBUF_SIZE   16  // Select 16 kBytes Receiver RAM buffer
+   #define TXBUF_SIZE   16  // Select 16 kBytes Transmitter RAM buffer
+```
+
+Default settings:
+
+```
+#define MAX_SOCK_NUM 8   // Select the number of Sockets (1-8)
+#define RXBUF_SIZE   2   // Select the Receiver buffer size (1 - 16 kBytes)
+#define TXBUF_SIZE   2   // Select the Transmitter buffer size (1 - 16 kBytes)
+```
+If you edit the **w5500.h** file, save it and re-compile your sketch.
 
 Using the Ethernet_STM library
 ----
