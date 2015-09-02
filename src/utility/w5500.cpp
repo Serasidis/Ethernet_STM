@@ -42,11 +42,12 @@ void W5500Class::init(void)
   SPI.setClockDivider(SPI_CS, 2); // 42 Mhz, ok 
   SPI.setDataMode(SPI_CS, SPI_MODE0);
 #endif
-    for (int i=0; i<MAX_SOCK_NUM; i++) {
-        uint8_t cntl_byte = (0x0C + (i<<5));
-        write( 0x1E, cntl_byte, 2); //0x1E - Sn_RXBUF_SIZE
-        write( 0x1F, cntl_byte, 2); //0x1F - Sn_TXBUF_SIZE
-    }
+  write(0x00, 0x05, 128); // Software reset the W5500 chip
+  for (int i=0; i<MAX_SOCK_NUM; i++) {
+    uint8_t cntl_byte = (0x0C + (i<<5));
+    write( 0x1E, cntl_byte, 2); //0x1E - Sn_RXBUF_SIZE
+    write( 0x1F, cntl_byte, 2); //0x1F - Sn_TXBUF_SIZE
+  }
 }
 
 uint16_t W5500Class::getTXFreeSize(SOCKET s)
