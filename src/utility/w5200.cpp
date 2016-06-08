@@ -237,11 +237,13 @@ uint8_t W5200Class::read(uint16_t _addr)
   uint8_t _data = SPI.transfer(0);
   resetSS();
 #elif defined(__STM32F1__)
+  digitalWrite(STM32_SPI_CS, LOW);
   SPI.transfer(_addr >> 8);
   SPI.transfer(_addr & 0xFF);
   SPI.transfer(0x00);
   SPI.transfer(0x01);
   uint8_t _data = SPI.transfer(0);
+  digitalWrite(STM32_SPI_CS, HIGH);
 #else
   SPI.transfer(SPI_CS, _addr >> 8, SPI_CONTINUE);
   SPI.transfer(SPI_CS, _addr & 0xFF, SPI_CONTINUE);
@@ -269,6 +271,7 @@ uint16_t W5200Class::read(uint16_t _addr, uint8_t *_buf, uint16_t _len)
   }
     resetSS();
 #elif defined(__STM32F1__)
+  digitalWrite(STM32_SPI_CS, LOW);
   SPI.transfer(_addr >> 8);
   SPI.transfer(_addr & 0xFF);
   SPI.transfer(0x00 | ((_len & 0x7F00) >> 8));
@@ -277,7 +280,8 @@ uint16_t W5200Class::read(uint16_t _addr, uint8_t *_buf, uint16_t _len)
   {
     _buf[i] = SPI.transfer(0);
   }
-    _buf[_len-1] = SPI.transfer(0);
+  _buf[_len-1] = SPI.transfer(0);
+  digitalWrite(STM32_SPI_CS, HIGH);
 #else
   SPI.transfer(SPI_CS, _addr >> 8, SPI_CONTINUE);
   SPI.transfer(SPI_CS, _addr & 0xFF, SPI_CONTINUE);
