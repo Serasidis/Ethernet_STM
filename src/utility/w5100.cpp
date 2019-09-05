@@ -41,7 +41,6 @@ void W5100Class::init(void)
   SPI.setBitOrder(MSBFIRST);
   SPI.setDataMode(SPI_MODE0);
   SPI.setClockDivider(SPI_CLOCK_DIV8);
-  pinMode(STM32_SPI_CS, OUTPUT);
 #else
   SPI.begin(SPI_CS);
   // Set clock to 4Mhz (W5100 should support up to about 14Mhz)
